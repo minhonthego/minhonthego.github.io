@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="MINH ON THE GO - Hành trình khám phá Việt Nam, review trải nghiệm du lịch và gợi ý chuẩn bị đồ đi chơi hợp lý."
+  />
+  <title>MINH ON THE GO | Trải nghiệm để trưởng thành</title>
+
+  <!-- Tailwind CSS CDN: triển khai nhanh, miễn phí, phù hợp GitHub Pages -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FontAwesome CDN: icon cho các nền tảng mạng xã hội và nút CTA -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <!-- Google Font: có thể bỏ dòng này nếu muốn dùng font mặc định của hệ thống -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Cấu hình màu thương hiệu cho Tailwind -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Be Vietnam Pro", "ui-sans-serif", "system-ui"]
+          },
+          colors: {
+            forest: "#123D2B",
+            forestSoft: "#1E5A3F",
+            leaf: "#2E7D52",
+            cream: "#F7EBD3",
+            sand: "#DCC7A2",
+            clay: "#B8895B",
+            ink: "#18251F",
+            burgundy: "#7A263A",
+            burgundyDark: "#541827"
+          },
+          boxShadow: {
+            tropical: "0 18px 50px rgba(18, 61, 43, 0.18)",
+            cta: "0 16px 34px rgba(122, 38, 58, 0.28)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Nền tổng thể: xanh rừng + kem cát, giữ cảm giác nhiệt đới hiện đại */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #f7ebd3;
+      color: #18251f;
+    }
+
+    /* Lớp phủ ảnh hero để chữ nổi rõ trên mọi màn hình */
+    .hero-bg {
+      position: relative;
+      overflow: hidden;
+      background-image:
+        linear-gradient(180deg, rgba(12, 31, 22, 0.42) 0%, rgba(12, 31, 22, 0.7) 100%),
+        url("./assets/hero.jpg");
+      background-position: center;
+      background-size: 112%;
+      animation: heroDrift 18s ease-in-out infinite alternate;
+    }
+
+    /* Hiệu ứng hover dùng chung cho nút, card và ảnh */
+    .lift-hover {
+      transition:
+        transform 220ms ease,
+        box-shadow 220ms ease,
+        background-color 220ms ease,
+        color 220ms ease,
+        border-color 220ms ease;
+    }
+
+    .lift-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 38px rgba(18, 61, 43, 0.18);
+    }
+
+    /* Ảnh trong card phóng nhẹ khi hover để trang có chiều sâu hơn */
+    .card-image {
+      transition: transform 700ms ease;
+    }
+
+    .lift-hover:hover .card-image {
+      transform: scale(1.06);
+    }
+
+    /* Card cao cấp hơn: viền sáng chạy mềm + chữ zoom nhẹ khi hover/chạm/hiện vào màn hình */
+    .glow-card {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    .glow-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: conic-gradient(
+        from var(--glow-angle, 0deg),
+        rgba(247, 235, 211, 0),
+        rgba(220, 199, 162, 0.95),
+        rgba(122, 38, 58, 0.7),
+        rgba(46, 125, 82, 0.9),
+        rgba(247, 235, 211, 0)
+      );
+      opacity: 0.82;
+      pointer-events: none;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      transition: opacity 380ms ease;
+      animation: borderGlow 4.8s linear infinite;
+    }
+
+    .glow-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .glow-card h3,
+    .glow-card .zoom-title {
+      transform-origin: left center;
+      transition: transform 320ms ease, color 320ms ease;
+    }
+
+    .glow-card:hover::before,
+    .glow-card:active::before,
+    .glow-card:focus-within::before,
+    .glow-card.is-visible::before {
+      opacity: 1;
+      animation-play-state: running;
+    }
+
+    .glow-card:hover h3,
+    .glow-card:active h3,
+    .glow-card:focus-within h3,
+    .glow-card.is-visible h3,
+    .glow-card:hover .zoom-title,
+    .glow-card:active .zoom-title,
+    .glow-card:focus-within .zoom-title,
+    .glow-card.is-visible .zoom-title {
+      transform: scale(1.035);
+    }
+
+    /* Card nền tảng: dải màu sáng ở chân thẻ, nở từ tâm ra hai bên khi chạm/hover */
+    .platform-card {
+      --platform-glow: #dcc7a2;
+      --platform-glow-soft: rgba(220, 199, 162, 0.42);
+      margin-bottom: 1.1rem;
+      overflow: visible;
+    }
+
+    .platform-card::after {
+      content: "";
+      position: absolute;
+      left: 1.4rem;
+      right: 1.4rem;
+      bottom: -0.82rem;
+      z-index: 2;
+      height: 5px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at center, #ffffff 0%, var(--platform-glow) 34%, transparent 70%),
+        linear-gradient(90deg, transparent 0%, var(--platform-glow) 22%, #ffffff 50%, var(--platform-glow) 78%, transparent 100%);
+      box-shadow:
+        0 0 18px var(--platform-glow),
+        0 0 42px var(--platform-glow-soft),
+        0 8px 24px var(--platform-glow-soft);
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 420ms cubic-bezier(0.19, 1, 0.22, 1), opacity 260ms ease;
+      pointer-events: none;
+    }
+
+    .platform-card:hover::after,
+    .platform-card:active::after,
+    .platform-card:focus-within::after,
+    .platform-card.is-pressed::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    /* Profile nổi nhẹ, tạo cảm giác trang đang "thở" nhưng không gây rối mắt */
+    .profile-float {
+      animation: floatCard 6.5s ease-in-out infinite;
+    }
+
+    /* Dải địa điểm chạy ngang để landing page bớt tĩnh */
+    .marquee {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      width: max-content;
+      animation: marqueeMove 32s linear infinite;
+    }
+
+    .marquee:hover .marquee-track {
+      animation-play-state: paused;
+    }
+
+    /* Header đậm hơn khi người dùng bắt đầu cuộn trang */
+    .header-active {
+      background: rgba(18, 61, 43, 0.96) !important;
+      box-shadow: 0 12px 30px rgba(12, 31, 22, 0.18);
+    }
+
+    /* Hiện dần từng khối khi cuộn đến viewport */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 720ms ease, transform 720ms ease;
+      transition-delay: var(--delay, 0ms);
+    }
+
+    .scroll-reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-reveal.is-visible.lift-hover:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Mũi tên cuộn nhẹ ở cuối hero */
+    .scroll-cue {
+      animation: cueBounce 1.8s ease-in-out infinite;
+    }
+
+    /* Animation nhẹ khi trang xuất hiện */
+    .fade-up {
+      animation: fadeUp 700ms ease both;
+    }
+
+    .fade-up.profile-float {
+      animation: fadeUp 700ms ease both, floatCard 6.5s ease-in-out 900ms infinite;
+    }
+
+    @keyframes heroDrift {
+      from {
+        background-position: center center;
+        background-size: 112%;
+      }
+      to {
+        background-position: center 44%;
+        background-size: 118%;
+      }
+    }
+
+    @property --glow-angle {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    @keyframes borderGlow {
+      to {
+        --glow-angle: 360deg;
+      }
+    }
+
+    @keyframes floatCard {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes marqueeMove {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    @keyframes cueBounce {
+      0%, 100% {
+        transform: translate(-50%, 0);
+      }
+      50% {
+        transform: translate(-50%, 8px);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-bg {
+        background-size: cover;
+        animation-duration: 24s;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .scroll-reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-sans antialiased">
+  <!-- Header điều hướng: thay href bằng section tương ứng nếu bạn đổi tên khối -->
+  <header id="siteHeader" class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-forest/80 text-cream backdrop-blur-xl transition-all duration-300">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
+      <a href="#top" class="text-sm font-black tracking-[0.14em] sm:tracking-[0.18em]">Minh On The Go</a>
+      <div class="hidden items-center gap-6 text-sm font-semibold sm:flex">
+        <a class="transition hover:text-sand" href="#about-minh">Về Minh</a>
+        <a class="transition hover:text-sand" href="#platforms">Nền tảng</a>
+        <a class="transition hover:text-sand" href="#journeys">Hành trình</a>
+        <a class="transition hover:text-sand" href="#upcoming">Sắp tới</a>
+        <a class="transition hover:text-sand" href="#projects">Dự án</a>
+        <a class="transition hover:text-sand" href="#gear">Chuẩn bị đồ</a>
+      </div>
+      <a
+        href="#platforms"
+        class="rounded-full bg-burgundy px-4 py-2 text-xs font-bold shadow-cta transition hover:bg-burgundyDark"
+      >
+        Theo dõi
+      </a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO: thay ảnh nền trong class .hero-bg bằng ảnh đẹp nhất của MINH ON THE GO -->
+    <section class="hero-bg flex min-h-[88vh] items-end">
+      <div class="mx-auto grid w-full max-w-6xl gap-8 px-4 pb-14 pt-28 sm:px-6 lg:grid-cols-[1.12fr_0.88fr] lg:items-end">
+        <div class="fade-up max-w-2xl text-cream">
+          <p class="mb-4 inline-flex items-center gap-2 rounded-full border border-cream/30 bg-cream/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] backdrop-blur">
+            <i class="fa-solid fa-location-dot text-sand"></i>
+            Vietnam Travel Creator
+          </p>
+          <h1 class="text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+            MINH<br />ON THE GO
+          </h1>
+          <p class="mt-5 text-xl font-semibold italic text-sand">"Trải nghiệm để trưởng thành"</p>
+          <p class="mt-5 max-w-xl text-base leading-7 text-cream/88 sm:text-lg">
+            Chia sẻ hành trình khám phá Việt Nam, những góc nhìn thật từ chuyến đi và gợi ý chuẩn bị đồ du lịch gọn nhẹ, dễ dùng.
+          </p>
+
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+            <!-- Thay link YouTube chính tại href bên dưới -->
+            <a
+              href="https://www.youtube.com/@MinhOnTheGo_98"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="lift-hover inline-flex items-center justify-center gap-3 rounded-full bg-burgundy px-6 py-4 text-sm font-extrabold text-cream shadow-cta hover:bg-burgundyDark"
+            >
+              <i class="fa-brands fa-youtube text-lg"></i>
+              Xem video mới nhất
+            </a>
+            <a
+              href="#journeys"
+              class="lift-hover inline-flex items-center justify-center gap-3 rounded-full border border-cream/35 bg-cream/10 px-6 py-4 text-sm font-extrabold text-cream backdrop-blur hover:bg-cream hover:text-forest"
+            >
+              <i class="fa-solid fa-compass text-lg"></i>
+              Khám phá hành trình
+            </a>
+          </div>
+        </div>
+
+        <!-- Profile nhanh: thay ảnh avatar bằng ảnh chân dung thật -->
+        <aside class="fade-up profile-float rounded-[2rem] border border-cream/25 bg-cream/12 p-5 text-cream shadow-tropical backdrop-blur-xl">
+          <div class="flex items-center gap-4">
+            <img
+              src="./assets/avatar.jpg"
+              alt="Avatar MINH ON THE GO"
+              class="h-20 w-20 rounded-full border-4 border-sand object-cover"
+            />
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.2em] text-sand">Creator Bio</p>
+              <h2 class="mt-1 text-2xl font-black">Minh</h2>
+              <p class="mt-1 text-sm text-cream/78">Du lịch, quay chụp, review trải nghiệm thật.</p>
+            </div>
+          </div>
+
+          <div class="mt-6 grid grid-cols-3 gap-3 text-center">
+            <div class="rounded-2xl bg-forest/50 p-3">
+              <p class="text-2xl font-black">6+</p>
+              <p class="mt-1 text-[11px] font-semibold text-cream/70">Hành trình</p>
+            </div>
+            <div class="rounded-2xl bg-forest/50 p-3">
+              <p class="text-2xl font-black">4K</p>
+              <p class="mt-1 text-[11px] font-semibold text-cream/70">Travel Film</p>
+            </div>
+            <div class="rounded-2xl bg-forest/50 p-3">
+              <p class="text-2xl font-black">100%</p>
+              <p class="mt-1 text-[11px] font-semibold text-cream/70">Review thật</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <a
+        href="#about-minh"
+        class="scroll-cue absolute bottom-5 left-1/2 hidden -translate-x-1/2 items-center gap-2 rounded-full border border-cream/25 bg-cream/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-cream backdrop-blur sm:inline-flex"
+      >
+        Cuộn xuống
+        <i class="fa-solid fa-arrow-down"></i>
+      </a>
+    </section>
+
+    <!-- DẢI ĐỊA ĐIỂM CHUYỂN ĐỘNG: tạo nhịp thị giác và gợi mở các chuyến đi -->
+    <section class="marquee bg-forest py-3 text-cream">
+      <div class="marquee-track gap-3 px-3">
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Quan Lạn</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Huế</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Hà Giang</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Ninh Bình</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Sapa</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Đà Nẵng - Hội An</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Quy Nhơn</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Cao Bằng</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Đà Lạt</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Phú Quốc</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Quan Lạn</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Huế</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Hà Giang</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Ninh Bình</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Sapa</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Đà Nẵng - Hội An</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Quy Nhơn</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Cao Bằng</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Đà Lạt</span>
+        <span class="rounded-full bg-cream/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sand">Phú Quốc</span>
+      </div>
+    </section>
+
+    <!-- GIỚI THIỆU BẢN THÂN: thay ảnh bên dưới bằng tấm ảnh tâm đắc nhất của bạn -->
+    <section id="about-minh" class="bg-[#F7EBD3] py-16 sm:py-20">
+      <div class="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+        <div class="glow-card scroll-reveal relative min-h-[28rem] overflow-hidden rounded-[2rem] bg-forest shadow-tropical ring-1 ring-forest/10">
+          <img
+            src="./assets/about-minh.jpg"
+            alt="Ảnh tâm đắc của MINH ON THE GO"
+            class="card-image h-full min-h-[28rem] w-full object-cover"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/72 via-forest/12 to-transparent"></div>
+          <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 text-cream">
+            <div>
+              <p class="text-xs font-black uppercase tracking-[0.26em] text-sand">Favorite Frame</p>
+              <h2 class="zoom-title mt-2 text-3xl font-black">Một khoảnh khắc Minh muốn giữ lại</h2>
+            </div>
+            <span class="hidden rotate-180 text-5xl font-black tracking-[0.28em] text-cream/22 [writing-mode:vertical-rl] sm:block">
+              MINH
+            </span>
+          </div>
+        </div>
+
+        <div class="scroll-reveal">
+          <p class="text-xs font-black uppercase tracking-[0.28em] text-burgundy">Meet Minh</p>
+          <h2 class="mt-3 text-4xl font-black leading-tight text-forest sm:text-5xl">
+            Xin chào, mình là <span class="italic text-clay">Minh</span> - người hay đi, hay kể.
+          </h2>
+          <div class="mt-6 space-y-5 text-base leading-8 text-ink/72">
+            <p>
+              Mình không cố làm mọi chuyến đi trở nên hoàn hảo. Mình thích ghi lại cảm giác thật trên đường: lúc trời đẹp, lúc mưa bất chợt, lúc tìm được một quán ngon nhỏ và cả lúc phải đổi kế hoạch.
+            </p>
+            <p>
+              MINH ON THE GO là nơi mình kể lại Việt Nam qua từng hành trình, từng vùng đất và những món đồ nhỏ giúp chuyến đi nhẹ nhàng hơn.
+            </p>
+          </div>
+
+          <div class="mt-10 border-t border-forest/12 pt-8">
+            <div class="grid grid-cols-3 gap-4">
+              <div>
+                <p class="text-4xl font-black text-clay">20+</p>
+                <p class="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-ink/54">Tỉnh thành</p>
+              </div>
+              <div>
+                <p class="text-4xl font-black text-clay">60+</p>
+                <p class="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-ink/54">Bài viết</p>
+              </div>
+              <div>
+                <p class="text-4xl font-black text-clay">∞</p>
+                <p class="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-ink/54">Kỷ niệm</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NỀN TẢNG: thay href="#" bằng link thật của từng kênh -->
+    <section id="platforms" class="bg-cream py-16 sm:py-20">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="text-xs font-black uppercase tracking-[0.28em] text-burgundy">Find Minh Everywhere</p>
+          <h2 class="mt-3 text-3xl font-black text-forest sm:text-4xl">Toàn bộ nền tảng của MINH ON THE GO</h2>
+          <p class="mt-4 text-sm leading-6 text-ink/70 sm:text-base">
+            Theo dõi Minh ở kênh bạn dùng nhiều nhất: video dài, clip ngắn, bài viết, ảnh hậu trường và các gợi ý chuẩn bị đồ trước chuyến đi.
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <a
+            href="https://www.youtube.com/@MinhOnTheGo_98"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="lift-hover glow-card platform-card group rounded-3xl bg-[#FF0033] p-5 text-white"
+            style="--platform-glow: #ff4d68; --platform-glow-soft: rgba(255, 0, 51, 0.46);"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <i class="fa-brands fa-youtube text-3xl"></i>
+                <h3 class="mt-4 text-xl font-black">YouTube</h3>
+                <p class="mt-2 text-sm text-white/82">Travel vlog, trải nghiệm thật, phim hành trình.</p>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square opacity-70 transition group-hover:opacity-100"></i>
+            </div>
+          </a>
+
+          <a
+            href="https://www.tiktok.com/@minhonthego_official?_r=1&_t=ZS-96NB66OJyzt"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="lift-hover glow-card platform-card group rounded-3xl bg-ink p-5 text-white"
+            style="--platform-glow: #25f4ee; --platform-glow-soft: rgba(37, 244, 238, 0.42);"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <i class="fa-brands fa-tiktok text-3xl"></i>
+                <h3 class="mt-4 text-xl font-black">Minh On The Go</h3>
+                <p class="mt-2 text-sm text-white/75">TikTok du lịch: clip nhanh, mẹo quay chụp, khoảnh khắc trên đường.</p>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square opacity-70 transition group-hover:opacity-100"></i>
+            </div>
+          </a>
+
+          <a
+            href="https://www.tiktok.com/@minhva1001monan?_r=1&_t=ZS-96NB8RPupxF"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="lift-hover glow-card platform-card group rounded-3xl bg-[#2A1610] p-5 text-white"
+            style="--platform-glow: #ff8a3d; --platform-glow-soft: rgba(255, 138, 61, 0.46);"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <i class="fa-brands fa-tiktok text-3xl"></i>
+                <h3 class="mt-4 text-xl font-black">Minh &amp; 1001 món ăn</h3>
+                <p class="mt-2 text-sm text-white/75">TikTok ẩm thực: món ngon địa phương, quán đáng thử và trải nghiệm ăn uống.</p>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square opacity-70 transition group-hover:opacity-100"></i>
+            </div>
+          </a>
+
+          <a
+            href="https://www.facebook.com/minhonthego"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="lift-hover glow-card platform-card group rounded-3xl bg-[#1877F2] p-5 text-white"
+            style="--platform-glow: #7ab5ff; --platform-glow-soft: rgba(24, 119, 242, 0.46);"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <i class="fa-brands fa-facebook text-3xl"></i>
+                <h3 class="mt-4 text-xl font-black">Facebook</h3>
+                <p class="mt-2 text-sm text-white/82">Bài viết, album ảnh, cập nhật lịch trình mới.</p>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square opacity-70 transition group-hover:opacity-100"></i>
+            </div>
+          </a>
+
+          <a
+            href="https://www.instagram.com/minhonthego_official?igsh=MWpwNzIwd3A1YmVwZw=="
+            target="_blank"
+            rel="noopener noreferrer"
+            class="lift-hover glow-card platform-card group rounded-3xl bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#FCAF45] p-5 text-white"
+            style="--platform-glow: #fcaf45; --platform-glow-soft: rgba(252, 175, 69, 0.5);"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <i class="fa-brands fa-instagram text-3xl"></i>
+                <h3 class="mt-4 text-xl font-black">Instagram</h3>
+                <p class="mt-2 text-sm text-white/88">Ảnh đẹp, reels, story hậu trường mỗi chuyến đi.</p>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square opacity-70 transition group-hover:opacity-100"></i>
+            </div>
+          </a>
+
+          <a
+            href="https://www.threads.com/@minhonthego_official"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="lift-hover glow-card platform-card group rounded-3xl bg-[#111111] p-5 text-white"
+            style="--platform-glow: #ffffff; --platform-glow-soft: rgba(255, 255, 255, 0.38);"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <i class="fa-brands fa-threads text-3xl"></i>
+                <h3 class="mt-4 text-xl font-black">Threads</h3>
+                <p class="mt-2 text-sm text-white/78">Ghi chú ngắn, suy nghĩ trên đường và cập nhật đời thường.</p>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square opacity-70 transition group-hover:opacity-100"></i>
+            </div>
+          </a>
+
+          <a
+            href="https://x.com/minhonthego"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="lift-hover glow-card platform-card group rounded-3xl bg-[#0F172A] p-5 text-white"
+            style="--platform-glow: #dbeafe; --platform-glow-soft: rgba(219, 234, 254, 0.38);"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <i class="fa-brands fa-x-twitter text-3xl"></i>
+                <h3 class="mt-4 text-xl font-black">X</h3>
+                <p class="mt-2 text-sm text-white/78">Cập nhật nhanh, ý tưởng hành trình và kết nối cộng đồng.</p>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square opacity-70 transition group-hover:opacity-100"></i>
+            </div>
+          </a>
+
+          <a
+            href="https://collshp.com/minh9804?view=storefront"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="lift-hover glow-card platform-card group rounded-3xl bg-forest p-5 text-cream"
+            style="--platform-glow: #dcc7a2; --platform-glow-soft: rgba(220, 199, 162, 0.48);"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <i class="fa-solid fa-store text-3xl"></i>
+                <h3 class="mt-4 text-xl font-black">Chuẩn bị đồ</h3>
+                <p class="mt-2 text-sm text-cream/78">Áo quần, giày dép và đồ du lịch nhỏ gọn để đi cùng Minh.</p>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square opacity-70 transition group-hover:opacity-100"></i>
+            </div>
+          </a>
+
+          <a
+            href="mailto:truongvanminh.haui@gmail.com"
+            class="lift-hover glow-card platform-card group rounded-3xl bg-burgundy p-5 text-cream"
+            style="--platform-glow: #f2a0b2; --platform-glow-soft: rgba(242, 160, 178, 0.48);"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <i class="fa-solid fa-envelope text-3xl"></i>
+                <h3 class="mt-4 text-xl font-black">Liên hệ</h3>
+                <p class="mt-2 text-sm text-cream/82">Booking, hợp tác du lịch, review sản phẩm.</p>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square opacity-70 transition group-hover:opacity-100"></i>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- GIỚI THIỆU: mô tả rõ MINH ON THE GO là ai và nội dung chính là gì -->
+    <section class="bg-forest py-16 text-cream sm:py-20">
+      <div class="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[0.28em] text-sand">About The Journey</p>
+          <h2 class="mt-3 text-3xl font-black sm:text-4xl">Đi để hiểu đất nước mình nhiều hơn</h2>
+        </div>
+        <div class="space-y-5 text-base leading-8 text-cream/82">
+          <p>
+            MINH ON THE GO ghi lại những chuyến đi theo cách chân thực: có cảnh đẹp, có trải nghiệm địa phương, có chi phí, có góc nhìn thực tế và có cả cách chuẩn bị đồ sao cho gọn, hợp lý.
+          </p>
+          <p>
+            Trang này là nơi gom toàn bộ kênh của Minh, các hành trình nổi bật và những món đồ dễ mua để bạn tham khảo trước chuyến đi tiếp theo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HÀNH TRÌNH BLOG: sửa nội dung/ảnh/link trong mảng journeyPosts ở cuối file -->
+    <section id="journeys" class="bg-[#F4E4C6] py-16 sm:py-20">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div class="max-w-2xl">
+            <p class="text-xs font-black uppercase tracking-[0.28em] text-burgundy">Travel Blog</p>
+            <h2 class="mt-3 text-3xl font-black text-forest sm:text-4xl">Những hành trình nổi bật</h2>
+            <p class="mt-4 text-sm leading-6 text-ink/70 sm:text-base">
+              Mỗi nơi là một lát cắt khác của Việt Nam: biển đảo, cố đô, núi đá, ruộng bậc thang và những phố cổ có nhịp sống rất riêng.
+            </p>
+          </div>
+          <a
+            href="#platforms"
+            class="lift-hover inline-flex items-center justify-center gap-3 rounded-full bg-forest px-5 py-3 text-sm font-extrabold text-cream"
+          >
+            <i class="fa-solid fa-play"></i>
+            Xem trên kênh
+          </a>
+        </div>
+
+        <div id="journeyGrid" class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3"></div>
+      </div>
+    </section>
+
+    <!-- HÀNH TRÌNH SẮP TỚI: sửa nội dung/ảnh/link trong mảng upcomingTrips ở cuối file -->
+    <section id="upcoming" class="bg-cream py-16 sm:py-20">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="text-xs font-black uppercase tracking-[0.28em] text-burgundy">Upcoming Trips</p>
+          <h2 class="mt-3 text-3xl font-black text-forest sm:text-4xl">Hành trình sắp tới</h2>
+          <p class="mt-4 text-sm leading-6 text-ink/70 sm:text-base">
+            Những điểm đến đang nằm trong lịch trình của Minh. Mỗi chuyến đi sẽ được cập nhật thành vlog, ảnh và bài review sau khi hoàn thành.
+          </p>
+        </div>
+
+        <div id="upcomingGrid" class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+      </div>
+    </section>
+
+    <!-- DỰ ÁN TƯƠNG LAI: sửa nội dung trong mảng futureProjects ở cuối file -->
+    <section id="projects" class="bg-forest py-16 text-cream sm:py-20">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div class="max-w-2xl">
+            <p class="text-xs font-black uppercase tracking-[0.28em] text-sand">Future Projects</p>
+            <h2 class="mt-3 text-3xl font-black sm:text-4xl">Dự án trong tương lai</h2>
+            <p class="mt-4 text-sm leading-6 text-cream/74 sm:text-base">
+              Những series dài hơi giúp MINH ON THE GO kể câu chuyện Việt Nam theo từng vùng, từng cung đường và từng chủ đề.
+            </p>
+          </div>
+          <a
+            href="#platforms"
+            class="lift-hover inline-flex items-center justify-center gap-3 rounded-full bg-burgundy px-5 py-3 text-sm font-extrabold text-cream shadow-cta hover:bg-burgundyDark"
+          >
+            <i class="fa-solid fa-bell"></i>
+            Nhận cập nhật
+          </a>
+        </div>
+
+        <div id="projectGrid" class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4"></div>
+      </div>
+    </section>
+
+    <!-- CHUẨN BỊ ĐỒ: thay url trong gearItems bằng link sản phẩm thật khi triển khai -->
+    <section id="gear" class="bg-cream py-16 sm:py-20">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="text-xs font-black uppercase tracking-[0.28em] text-burgundy">Travel Essentials</p>
+          <h2 class="mt-3 text-3xl font-black text-forest sm:text-4xl">Chuẩn bị đồ cùng đi với Minh nhé</h2>
+          <p class="mt-4 text-sm leading-6 text-ink/70 sm:text-base">
+            Một góc nhỏ để Minh gợi ý áo quần, giày dép và đồ du lịch nhỏ có giá hợp lý, dễ mua, dễ dùng cho nhiều kiểu chuyến đi.
+          </p>
+        </div>
+
+        <div id="gearGrid" class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER: gom nhận diện thương hiệu, social links, điều hướng và bản quyền cuối trang -->
+  <footer class="relative overflow-hidden bg-[#0B1C14] px-4 py-12 text-cream sm:px-6 sm:py-14">
+    <div class="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-leaf/20 blur-3xl"></div>
+    <div class="pointer-events-none absolute -right-24 bottom-10 h-72 w-72 rounded-full bg-burgundy/20 blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-6xl">
+      <div class="grid gap-9 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+        <div>
+          <h2 class="max-w-3xl text-4xl font-black leading-tight tracking-wide sm:text-5xl lg:text-5xl">
+            <span class="text-cream">MINH</span>
+            <span class="text-clay"> ON THE GO</span>
+          </h2>
+          <p class="mt-6 max-w-2xl text-lg italic leading-8 text-sand/82 sm:text-xl">
+            Những hành trình không có điểm đến cố định - chỉ có những khoảnh khắc đáng sống và câu chuyện đáng kể.
+          </p>
+          <p class="mt-4 max-w-2xl text-sm leading-7 text-cream/66 sm:text-base">
+            Chia sẻ đam mê, kết nối những tâm hồn yêu tự do và khao khát khám phá.
+          </p>
+        </div>
+
+        <div class="lg:justify-self-end lg:w-full lg:max-w-xs">
+          <div class="rounded-[1.25rem] border border-cream/10 bg-cream/5 p-4 backdrop-blur">
+            <h3 class="text-xs font-black uppercase tracking-[0.22em] text-sand">Đi nhanh</h3>
+            <div class="mt-4 space-y-2 text-sm font-semibold text-cream/72">
+              <a href="#about-minh" class="flex items-center justify-between rounded-xl px-3 py-2 transition hover:bg-cream/8 hover:text-cream">
+                Về Minh
+                <i class="fa-solid fa-arrow-right text-xs text-sand"></i>
+              </a>
+              <a href="#journeys" class="flex items-center justify-between rounded-xl px-3 py-2 transition hover:bg-cream/8 hover:text-cream">
+                Hành trình nổi bật
+                <i class="fa-solid fa-arrow-right text-xs text-sand"></i>
+              </a>
+              <a href="#upcoming" class="flex items-center justify-between rounded-xl px-3 py-2 transition hover:bg-cream/8 hover:text-cream">
+                Hành trình sắp tới
+                <i class="fa-solid fa-arrow-right text-xs text-sand"></i>
+              </a>
+              <a href="#gear" class="flex items-center justify-between rounded-xl px-3 py-2 transition hover:bg-cream/8 hover:text-cream">
+                Chuẩn bị đồ
+                <i class="fa-solid fa-arrow-right text-xs text-sand"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 border-t border-cream/10 pt-6">
+        <!-- Icon nền tảng cuối trang: chỉ để logo, thay href="#" bằng link thật -->
+        <div class="mb-6 flex flex-wrap items-center justify-center gap-3">
+          <a href="https://www.facebook.com/minhonthego" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="lift-hover flex h-10 w-10 items-center justify-center rounded-full border border-cream/10 bg-cream/5 text-lg text-cream/72 hover:border-[#1877F2] hover:bg-[#1877F2] hover:text-white">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+          <a href="https://www.instagram.com/minhonthego_official?igsh=MWpwNzIwd3A1YmVwZw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="lift-hover flex h-10 w-10 items-center justify-center rounded-full border border-cream/10 bg-cream/5 text-lg text-cream/72 hover:border-[#FCAF45] hover:bg-[#E4405F] hover:text-white">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://www.threads.com/@minhonthego_official" target="_blank" rel="noopener noreferrer" aria-label="Threads" class="lift-hover flex h-10 w-10 items-center justify-center rounded-full border border-cream/10 bg-cream/5 text-lg text-cream/72 hover:border-white hover:bg-white hover:text-forest">
+            <i class="fa-brands fa-threads"></i>
+          </a>
+          <a href="https://x.com/minhonthego" target="_blank" rel="noopener noreferrer" aria-label="X" class="lift-hover flex h-10 w-10 items-center justify-center rounded-full border border-cream/10 bg-cream/5 text-lg text-cream/72 hover:border-white hover:bg-white hover:text-forest">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+          <a href="https://www.tiktok.com/@minhonthego_official?_r=1&_t=ZS-96NB66OJyzt" target="_blank" rel="noopener noreferrer" aria-label="TikTok Minh On The Go" class="lift-hover flex h-10 w-10 items-center justify-center rounded-full border border-cream/10 bg-cream/5 text-lg text-cream/72 hover:border-[#25F4EE] hover:bg-ink hover:text-white">
+            <i class="fa-brands fa-tiktok"></i>
+          </a>
+          <a href="https://www.tiktok.com/@minhva1001monan?_r=1&_t=ZS-96NB8RPupxF" target="_blank" rel="noopener noreferrer" aria-label="TikTok Minh & 1001 món ăn" class="lift-hover flex h-10 w-10 items-center justify-center rounded-full border border-cream/10 bg-cream/5 text-lg text-cream/72 hover:border-[#ff8a3d] hover:bg-[#2A1610] hover:text-white">
+            <i class="fa-brands fa-tiktok"></i>
+          </a>
+          <a href="https://www.youtube.com/@MinhOnTheGo_98" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="lift-hover flex h-10 w-10 items-center justify-center rounded-full border border-cream/10 bg-cream/5 text-lg text-cream/72 hover:border-[#FF0033] hover:bg-[#FF0033] hover:text-white">
+            <i class="fa-brands fa-youtube"></i>
+          </a>
+        </div>
+
+        <div class="flex flex-col gap-4 text-center text-xs font-semibold text-cream/60 sm:flex-row sm:items-center sm:justify-between sm:text-left">
+          <p>© <span id="currentYear"></span> <span class="font-black text-clay">MINH ON THE GO</span>. All rights reserved.</p>
+          <p>Made with <span class="text-clay">&hearts;</span> & wanderlust.</p>
+        </div>
+      </div>
+    </div>
+
+    <a
+      href="#top"
+      aria-label="Quay về đầu trang"
+      class="lift-hover absolute bottom-6 right-5 flex h-12 w-12 items-center justify-center rounded-full bg-burgundy text-lg text-cream shadow-cta hover:bg-burgundyDark sm:bottom-8 sm:right-8 sm:h-14 sm:w-14"
+    >
+      <i class="fa-solid fa-arrow-up"></i>
+    </a>
+  </footer>
+
+  <script>
+    // Dữ liệu bài hành trình: thay image/link/description bằng bài thật khi có nội dung chính thức.
+    const journeyPosts = [
+      {
+        title: "Quan Lạn",
+        location: "Biển đảo Quảng Ninh",
+        image: "./assets/journey-quan-lan.jpg",
+        description: "Một chuyến đi nhiều gió biển, bãi cát dài và nhịp sống đảo chậm rãi. Phù hợp cho ai muốn tách khỏi thành phố vài ngày.",
+        tags: ["Biển đảo", "Chill", "Cuối tuần"],
+        link: "#"
+      },
+      {
+        title: "Huế",
+        location: "Cố đô và văn hóa miền Trung",
+        image: "./assets/journey-hue.jpg",
+        description: "Huế không chỉ có lăng tẩm và Đại Nội, mà còn có những buổi chiều rất thơ bên sông Hương và món ăn đậm ký ức.",
+        tags: ["Văn hóa", "Ẩm thực", "Cố đô"],
+        link: "#"
+      },
+      {
+        title: "Hà Giang",
+        location: "Cung đường đá và mây núi",
+        image: "./assets/journey-ha-giang.jpg",
+        description: "Những khúc cua, đèo cao và bản làng vùng đá khiến Hà Giang luôn là hành trình đáng đi ít nhất một lần.",
+        tags: ["Roadtrip", "Núi", "Phiêu lưu"],
+        link: "#"
+      },
+      {
+        title: "Ninh Bình",
+        location: "Núi đá, sông nước, hang động",
+        image: "./assets/journey-ninh-binh.jpg",
+        description: "Một điểm đến dễ đi nhưng nhiều lớp trải nghiệm: Tràng An, Tam Cốc, Hang Múa và những buổi sáng đầy sương.",
+        tags: ["Thiên nhiên", "Di sản", "Gần Hà Nội"],
+        link: "#"
+      },
+      {
+        title: "Sapa",
+        location: "Ruộng bậc thang và bản làng",
+        image: "./assets/journey-sapa.jpg",
+        description: "Sapa đẹp nhất khi đi chậm: nhìn mây trôi qua núi, ghé bản làng và nghe câu chuyện từ những người địa phương.",
+        tags: ["Tây Bắc", "Trekking", "Mây núi"],
+        link: "#"
+      },
+      {
+        title: "Đà Nẵng - Hội An",
+        location: "Biển, phố cổ và nhịp sống miền Trung",
+        image: "./assets/journey-da-nang-hoi-an.jpg",
+        description: "Từ biển Mỹ Khê đến phố đèn lồng Hội An, hành trình này cân bằng giữa nghỉ dưỡng, ẩm thực và ảnh đẹp.",
+        tags: ["Miền Trung", "Phố cổ", "Biển"],
+        link: "#"
+      }
+    ];
+
+    // Dữ liệu hành trình sắp tới: thêm/bớt điểm đến tại đây khi lịch trình thay đổi.
+    const upcomingTrips = [
+      {
+        title: "Quy Nhơn",
+        region: "Biển xanh và nhịp sống miền Trung",
+        image: "./assets/upcoming-quy-nhon.jpg",
+        description: "Một điểm đến nhiều nắng, biển trong, hải sản ngon và các cung đường ven biển rất hợp để quay travel film.",
+        status: "Đang lên lịch",
+        link: "#"
+      },
+      {
+        title: "Cao Bằng",
+        region: "Thác Bản Giốc và núi rừng Đông Bắc",
+        image: "./assets/upcoming-cao-bang.jpg",
+        description: "Một hành trình nhiều thiên nhiên: thác nước, hang động, bản làng và những cung đường xanh mướt.",
+        status: "Sắp khảo sát",
+        link: "#"
+      },
+      {
+        title: "Hà Giang",
+        region: "Trở lại với cao nguyên đá",
+        image: "./assets/upcoming-ha-giang.jpg",
+        description: "Lần quay lại để đi chậm hơn, ghi nhiều câu chuyện địa phương hơn và săn những góc máy mới.",
+        status: "Đang chuẩn bị",
+        link: "#"
+      },
+      {
+        title: "TP. Hồ Chí Minh - Phan Thiết",
+        region: "Cung đường đô thị đến biển",
+        image: "./assets/upcoming-hcm-phan-thiet.jpg",
+        description: "Một route dễ đi cho cuối tuần: nhịp sống Sài Gòn, đường ven biển, đồi cát và hải sản Phan Thiết.",
+        status: "Gợi ý cuối tuần",
+        link: "#"
+      },
+      {
+        title: "Phú Quốc",
+        region: "Đảo ngọc phía Nam",
+        image: "./assets/upcoming-phu-quoc.jpg",
+        description: "Biển đảo, hoàng hôn, trải nghiệm nghỉ dưỡng và các góc quay flycam dành cho người mê du lịch biển.",
+        status: "Đang chờ mùa đẹp",
+        link: "#"
+      },
+      {
+        title: "Đà Lạt",
+        region: "Thành phố sương mù và những cung đường xanh",
+        image: "./assets/upcoming-da-lat.jpg",
+        description: "Một hành trình nhẹ nhàng với rừng thông, cà phê, thời tiết se lạnh và những góc quay rất hợp travel vlog.",
+        status: "Đang lên ý tưởng",
+        link: "#"
+      },
+      {
+        title: "Điểm đến tiếp theo",
+        region: "Đang cập nhật",
+        image: "./assets/upcoming-next.jpg",
+        description: "Một ô mở để Minh bổ sung thêm hành trình mới khi có lịch trình, lời mời hợp tác hoặc cảm hứng lên đường.",
+        status: "Coming soon",
+        link: "#"
+      }
+    ];
+
+    // Dữ liệu dự án tương lai: phù hợp để phát triển thành series nội dung dài hạn.
+    const futureProjects = [
+      {
+        title: "Hành trình Tây Bắc",
+        icon: "fa-mountain-sun",
+        description: "Một series về núi rừng, bản làng, ruộng bậc thang và văn hóa vùng cao theo cách đi chậm.",
+        timeline: "Series theo mùa"
+      },
+      {
+        title: "Hành trình xuyên Việt",
+        icon: "fa-route",
+        description: "Tuyến nội dung lớn đi qua nhiều tỉnh thành, ghi lại đường sá, chi phí, trải nghiệm và con người.",
+        timeline: "Dự án dài hạn"
+      },
+      {
+        title: "Biển đảo Việt Nam",
+        icon: "fa-water",
+        description: "Khám phá các vùng biển, đảo, làng chài và những trải nghiệm gần gũi với đời sống địa phương.",
+        timeline: "Theo từng chặng"
+      },
+      {
+        title: "Dự án đang ấp ủ",
+        icon: "fa-seedling",
+        description: "Không gian mở cho các ý tưởng mới: bản đồ du lịch, checklist chuẩn bị đồ hoặc collab với địa phương.",
+        timeline: "Đang cập nhật"
+      }
+    ];
+
+    // Dữ liệu chuẩn bị đồ: thay url bằng link sản phẩm thật của bạn khi triển khai.
+    const gearItems = [
+      {
+        name: "Áo khoác",
+        icon: "fa-shirt",
+        note: "Áo khoác gió, áo chống nắng, áo giữ ấm nhẹ cho các chuyến đi biển, núi và roadtrip.",
+        url: "https://collshp.com/minh9804/category/3762803?view=storefront"
+      },
+      {
+        name: "Quần",
+        icon: "fa-person-walking",
+        note: "Quần nhanh khô, quần trekking, quần short hoặc quần dài dễ phối và dễ di chuyển.",
+        url: "https://collshp.com/minh9804/category/3762804?view=storefront"
+      },
+      {
+        name: "Giầy",
+        icon: "fa-shoe-prints",
+        note: "Giầy đi bộ, sandal, dép trekking và các lựa chọn êm chân cho lịch trình nhiều hoạt động.",
+        url: "https://collshp.com/minh9804/category/3762807?view=storefront"
+      },
+      {
+        name: "Xem tất cả",
+        icon: "fa-layer-group",
+        note: "Tổng hợp toàn bộ gợi ý áo quần, giầy dép và đồ du lịch nhỏ gọn Minh chọn cho từng chuyến đi.",
+        url: "https://collshp.com/minh9804?view=storefront"
+      }
+    ];
+
+    // Render các card hành trình theo dạng blog có ảnh, mô tả và tag.
+    const journeyGrid = document.getElementById("journeyGrid");
+
+    journeyPosts.forEach((post) => {
+      const tags = post.tags
+        .map((tag) => `<span class="rounded-full bg-forest/10 px-3 py-1 text-[11px] font-bold text-forest">${tag}</span>`)
+        .join("");
+
+      const article = document.createElement("article");
+      article.className = "lift-hover glow-card overflow-hidden rounded-[1.6rem] bg-cream shadow-tropical ring-1 ring-forest/10";
+      article.innerHTML = `
+        <a href="${post.link}" class="block">
+          <img src="${post.image}" alt="Hành trình ${post.title}" class="card-image h-56 w-full object-cover" loading="lazy" />
+          <div class="p-5">
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-burgundy">${post.location}</p>
+            <h3 class="mt-2 text-2xl font-black text-forest">${post.title}</h3>
+            <p class="mt-3 text-sm leading-6 text-ink/72">${post.description}</p>
+            <div class="mt-4 flex flex-wrap gap-2">${tags}</div>
+            <div class="mt-5 inline-flex items-center gap-2 text-sm font-black text-burgundy">
+              Xem hành trình
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
+        </a>
+      `;
+
+      journeyGrid.appendChild(article);
+    });
+
+    // Render các card hành trình sắp tới theo dạng ảnh + mô tả ngắn.
+    const upcomingGrid = document.getElementById("upcomingGrid");
+
+    upcomingTrips.forEach((trip) => {
+      const card = document.createElement("article");
+      card.className = "lift-hover glow-card overflow-hidden rounded-[1.6rem] bg-[#F4E4C6] ring-1 ring-forest/10";
+      card.innerHTML = `
+        <a href="${trip.link}" class="block">
+          <div class="relative">
+            <img src="${trip.image}" alt="Hành trình sắp tới ${trip.title}" class="card-image h-48 w-full object-cover" loading="lazy" />
+            <span class="absolute left-4 top-4 rounded-full bg-burgundy px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-cream shadow-cta">
+              ${trip.status}
+            </span>
+          </div>
+          <div class="p-5">
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-burgundy">${trip.region}</p>
+            <h3 class="mt-2 text-2xl font-black text-forest">${trip.title}</h3>
+            <p class="mt-3 text-sm leading-6 text-ink/72">${trip.description}</p>
+            <div class="mt-5 inline-flex items-center gap-2 text-sm font-black text-forest">
+              Theo dõi kế hoạch
+              <i class="fa-solid fa-calendar-days"></i>
+            </div>
+          </div>
+        </a>
+      `;
+
+      upcomingGrid.appendChild(card);
+    });
+
+    // Render các card dự án tương lai theo dạng series nội dung.
+    const projectGrid = document.getElementById("projectGrid");
+
+    futureProjects.forEach((project) => {
+      const card = document.createElement("article");
+      card.className = "lift-hover glow-card flex min-h-72 flex-col justify-between rounded-[1.6rem] border border-cream/15 bg-cream/10 p-5 backdrop-blur";
+      card.innerHTML = `
+        <div>
+          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sand text-xl text-forest">
+            <i class="fa-solid ${project.icon}"></i>
+          </div>
+          <p class="mt-5 text-xs font-black uppercase tracking-[0.18em] text-sand">${project.timeline}</p>
+          <h3 class="mt-2 text-xl font-black text-cream">${project.title}</h3>
+          <p class="mt-3 text-sm leading-6 text-cream/72">${project.description}</p>
+        </div>
+        <div class="mt-6 inline-flex items-center gap-2 text-sm font-black text-sand">
+          Đang phát triển
+          <i class="fa-solid fa-arrow-trend-up"></i>
+        </div>
+      `;
+
+      projectGrid.appendChild(card);
+    });
+
+    // Render các card gợi ý chuẩn bị đồ để bạn chỉ cần sửa dữ liệu gearItems phía trên.
+    const gearGrid = document.getElementById("gearGrid");
+
+    gearItems.forEach((item) => {
+      const card = document.createElement("article");
+      card.className = "lift-hover glow-card flex min-h-64 flex-col justify-between rounded-[1.6rem] bg-[#F4E4C6] p-5 ring-1 ring-forest/10";
+      card.innerHTML = `
+        <div>
+          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-forest text-xl text-cream">
+            <i class="fa-solid ${item.icon}"></i>
+          </div>
+          <h3 class="mt-5 text-lg font-black leading-6 text-forest">${item.name}</h3>
+          <p class="mt-3 text-sm leading-6 text-ink/68">${item.note}</p>
+        </div>
+        <a
+          href="${item.url}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-burgundy px-4 py-3 text-sm font-extrabold text-cream transition hover:bg-burgundyDark hover:shadow-cta"
+        >
+          Xem gợi ý
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      `;
+
+      gearGrid.appendChild(card);
+    });
+
+    // Header phản hồi theo vị trí cuộn để tạo cảm giác trang sống hơn.
+    const siteHeader = document.getElementById("siteHeader");
+    const updateHeaderState = () => {
+      siteHeader.classList.toggle("header-active", window.scrollY > 18);
+    };
+
+    updateHeaderState();
+    window.addEventListener("scroll", updateHeaderState, { passive: true });
+
+    // Hiệu ứng hiện dần khi cuộn đến từng section/card.
+    const revealTargets = [
+      ...new Set(
+        document.querySelectorAll(
+          "#about-minh .scroll-reveal, #platforms > div > div, #platforms a, #journeys > div > div:first-child, #upcoming > div > div:first-child, #projects > div > div:first-child, #gear > div > div:first-child, .glow-card, footer"
+        )
+      )
+    ];
+
+    revealTargets.forEach((element, index) => {
+      element.classList.add("scroll-reveal");
+      element.style.setProperty("--delay", `${(index % 6) * 70}ms`);
+    });
+
+    if ("IntersectionObserver" in window) {
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.14,
+          rootMargin: "0px 0px -60px 0px"
+        }
+      );
+
+      revealTargets.forEach((element) => revealObserver.observe(element));
+    } else {
+      revealTargets.forEach((element) => element.classList.add("is-visible"));
+    }
+
+    // Trên thiết bị cảm ứng, giữ dải sáng ở chân card nền tảng trong một nhịp ngắn sau khi chạm.
+    document.querySelectorAll(".platform-card").forEach((card) => {
+      card.addEventListener("pointerdown", () => {
+        card.classList.add("is-pressed");
+        window.setTimeout(() => card.classList.remove("is-pressed"), 650);
+      });
+    });
+
+    // Tự động cập nhật năm ở footer.
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
